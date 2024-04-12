@@ -24,7 +24,8 @@ def get_stock_history(stock):
 ```
 it should return a data frame like this below
 
-![stock history](stock_history_output.png)
+<!-- ![stock history](stock_history_output.png) -->
+<img alt="stock history" src="./stock_history_output.png" width="1000">
 
 ```python
 def get_stock_financials(stock):
@@ -35,8 +36,10 @@ def get_stock_financials(stock):
 
 ```
 it should return a data frame like this below
-![stock financial](stock_financial.png)
+
+<img alt="stock financial" src="./stock_financial.png" width="1500">
+
 
 When creating functions, please add type hinting and doc string like below
 
-![type hinting](type_hinting.png)
+<img alt="stock financial" src="./type_hinting.png" width="1000">
