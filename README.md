@@ -43,3 +43,21 @@ it should return a data frame like this below
 When creating functions, please add type hinting and doc string like below
 
 <img alt="stock financial" src="./type_hinting.png" width="1000">
+
+
+### Task 2
+```python
+1. add function below to extract_data.py
+def get_exchange_rate(stock):
+```
+and output should look like below
+
+<img alt="stock financial" src="./exchange_rate.png" width="1000">
+
+```python
+2. add function below to extract_data.py
+def get_news(stock):
+```
+and output should look like below
+
+<img alt="stock financial" src="./news.png" width="1000">
