@@ -1,26 +1,23 @@
-"""_summary_
-"""
+"""Extract stock data using yahoo finance api"""
 from enum import Enum
 import pandas as pd
 import yfinance as yf
 
-class StockData(Enum):
-    """_summary_
+DATE_FORMAT = '%Y-%m-%d %H:%M:%S.%f'
 
-    Args:
-        Enum (_type_): _description_
-    """    
+class StockData(Enum):
+    """Enum for stock related attributes"""
     DATE = 'date'
     STOCKSPLITS = 'Stock Splits'
     DIVIDENDS = 'Dividends'
     STOCK = 'stock'
 
 def get_stock_history(stock:str):
-    """_summary_
+    """This function donwloads historical stockprices from yahoo finance api
     Args:
-        stock (str): _description_
+        stock (str): stock name you want to download price for
     Returns:
-        pd.DataFrame: _description_
+        pd.DataFrame: records price marks of the stock for 6 days 
     """
     ticker = yf.Ticker(stock)
     result = ticker.history(period="6d")
@@ -29,20 +26,20 @@ def get_stock_history(stock:str):
     result[StockData.DIVIDENDS.value] = result[StockData.DIVIDENDS.value].astype(int)
     result.columns = result.columns.str.lower()
     result[StockData.STOCK.value] = stock
-    result[StockData.DATE.value] = result[StockData.DATE.value].apply(lambda x: x.strftime('%Y-%m-%d %H:%M:%S.%f'))
+    result[StockData.DATE.value] = result[StockData.DATE.value].apply(lambda x: x.strftime(DATE_FORMAT))
     return result
 
 def get_stock_financials(stock:str):
-    """_summary_
+    """This function downloads stock financials(income statement) from yahoo finance api
     Args:
-        stock (str): _description_
+        stock (str): stock name you want to download the income statement for 
     Returns:
-        pd.DataFrame: _description_
+        pd.DataFrame: the stock income statement information of recent four years
     """
     ticker = yf.Ticker(stock)
     shares = ticker.income_stmt
-    shares = shares.iloc[:17].T
+    shares = shares.T
     shares.reset_index(inplace = True)
     shares = shares.rename(columns = {'index' : StockData.DATE.value})
-    shares[StockData.DATE.value] = shares[StockData.DATE.value].apply(lambda x: x.strftime('%Y-%m-%d %H:%M:%S.%f'))
+    shares[StockData.DATE.value] = shares[StockData.DATE.value].apply(lambda x: x.strftime(DATE_FORMAT))
     return shares
