@@ -48,7 +48,16 @@ When creating functions, please add type hinting and doc string like below
 ### Task 2
 ```python
 1. add function below to extract_data.py
-def get_exchange_rate(stock):
+def get_exchange_rate(stock, period, interval, to_currency):
+    # 1 get currency code of the stock
+    ticker = yf.Ticker(stock)
+    currency_code = ticker.fast_info["currency"]
+    fx_rate_ticker = f'{ticker}{to_currency}=X'
+    fx_rates = yf.download(fx_rate_ticker,period=period, interval=interval)
+
+
+get_exchange_rate("AAPL", period="5d", interval="1d", "GBP")
+
 ```
 and output should look like below
 
