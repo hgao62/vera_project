@@ -52,7 +52,7 @@ def get_exchange_rate(stock, period, interval, to_currency):
     # 1 get currency code of the stock
     ticker = yf.Ticker(stock)
     currency_code = ticker.fast_info["currency"]
-    fx_rate_ticker = f'{ticker}{to_currency}=X'
+    fx_rate_ticker = f'{currency_code}{to_currency}=X'
     fx_rates = yf.download(fx_rate_ticker,period=period, interval=interval)
 
 
