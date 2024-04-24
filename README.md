@@ -85,22 +85,8 @@ def enrich_stock_history(stock_history:pd.DataFrame):
     return stock_history
 
 ```
-2. create load_data.py file
-   a. create function like below that save dataframe to sqlite db
+2. create load_data.py file and create function inside like below that save dataframe to sqlite db
      
-
-    instructions on how to connect to sqlite using python
-```python
-
-import sqlite3 #1. import sqlite library(used to interact with sqlite)
-from sqlalchemy import create_engine #2. import sqlalchemy library(used for interact with db using pandas)
-ENGINE = create_engine(f"sqlite:///<path on your local drive>.db") #3. create engine
-df.to_sql() #4. final step of saving dataframe to db, see pandas documents on how to pass the requried parameterss
-# https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_sql.html
-```
-
-use instructions above to complete this function below
-
 ```python
  def save_df_to_db(
     df, table_name, if_exists="append", dtype=None, engine=MYSQL_ENGINE 
@@ -119,9 +105,22 @@ use instructions above to complete this function below
     Returns:
         None. This function logs a note in the log file to confirm that data has been sent to the SQL database.
     """
-
-
 ```
+
+instructions on how to connect to sqlite using python
+
+```python
+
+import sqlite3 #1. import sqlite library(used to interact with sqlite)
+from sqlalchemy import create_engine #2. import sqlalchemy library(used for interact with db using pandas)
+ENGINE = create_engine(f"sqlite:///<path on your local drive>.db") #3. create engine
+df.to_sql() #4. final step of saving dataframe to db, see pandas documents on how to pass the requried parameterss
+# https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_sql.html
+```
+
+
+
+
 ## How to set up airflow
 #### 1. build image and create a container based on the image just  created
 ```docker
