@@ -61,6 +61,8 @@ def get_exchange_rate(stock, period, interval, to_currency):
     """This function downloads exchange rate changes of a certain currency from yahoo finance api
     Args:
         stock (str): stock name you want to download the income statement for 
+    Returns:
+        pd.DataFrame: the stock currency rate information for a given time period
     """
     ticker = yf.Ticker(stock)
     currency_code = ticker.fast_info['currency']
@@ -95,6 +97,8 @@ def get_news(stock):
     """This function downloads stock news information from yahoo finance api
     Args:
         stock (str): stock name that is used to download the related news
+    Returns:
+        pd.DataFrame: the stock news information of recent four years
     """
     ticker = yf.Ticker(stock)
     news = ticker.news
