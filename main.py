@@ -13,6 +13,5 @@ def main():
     enrich = enrich_stock_history(get_stock_history(stock))
     print(enrich)
 
-
 if __name__ == "__main__":
     main()

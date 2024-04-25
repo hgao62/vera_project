@@ -18,7 +18,4 @@ def save_df_to_db(df, table_name, if_exists="append", dtype=None, engine=MYSQL_E
     Returns:
         None. This function logs a note in the log file to confirm that data has been sent to the SQL database.
     """
-    df.to_sql(name = table_name, con = ENGINE, if_exists = if_exists, dtype = dtype)
-
-
-    
+    df.to_sql(name = table_name, con = ENGINE, if_exists = if_exists, dtype = dtype) 

@@ -115,6 +115,9 @@ def enrich_stock_history(stock_history:pd.DataFrame):
 
     Args:
         stock_history (pd.DataFrame): dataframe that describes the stock history with daily return and cummulative return added
+        
+    Returns:
+        pd.DataFrame: the stock history with daily return and cummulative return data
     """
     stock_history[StockData.DAILYRETURN.value] = stock_history.close.pct_change(1)
     stock_history[StockData.CUMRETURN.value] = (1 + stock_history.daily_return).cumprod() - 1
