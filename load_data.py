@@ -2,7 +2,7 @@ import pandas as pd
 import sqlite3
 from sqlalchemy import create_engine
 
-ENGINE = create_engine(f"sqlite:///<path on your local drive>.db")
+ENGINE = create_engine(f"sqlite://Users/vera/Desktop/project_etl/vera_project/database/stock_db.db")
 
 def save_df_to_db(df, table_name, if_exists="append", dtype=None, engine=MYSQL_ENGINE):
     """Function to send a dataframe to SQL database.
