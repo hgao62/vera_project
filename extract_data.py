@@ -22,6 +22,8 @@ class StockData(Enum):
     LOW = 'Low'
     HIGH = 'High'
     CURRENCYCLOSE = 'currency_close'
+    DAILYRETURN = 'daily_return'
+    CUMRETURN = 'cummulative_return'
 
 
 def get_stock_history(stock:str):
@@ -55,6 +57,50 @@ def get_stock_financials(stock:str):
     shares.reset_index(inplace = True)
     shares = shares.rename(columns = {'index' : StockData.DATE.value})
     shares[StockData.DATE.value] = shares[StockData.DATE.value].apply(lambda x: x.strftime(DATE_FORMAT))
+    columns = [
+        "date",
+        "Tax Effect Of Unusual Items",
+        "Tax Rate For Calcs",
+        "Normalized EBITDA",
+        "Net Income From Continuing Operation Net Minority Interest",
+        "Reconciled Depreciation",
+        "Reconciled Cost Of Revenue",
+        "EBITDA",
+        "EBIT",
+        "Net Interest Income",
+        "Interest Expense",
+        "Interest Income",
+        "Normalized Income",
+        "Net Income From Continuing And Discontinued Operation",
+        "Total Expenses",
+        "Total Operating Income As Reported",
+        "Diluted Average Shares",
+        "Basic Average Shares",
+        "Diluted EPS",
+        "Basic EPS",
+        "Diluted NI Availto Com Stockholders",
+        "Net Income Common Stockholders",
+        "Net Income",
+        "Net Income Including Noncontrolling Interests",
+        "Net Income Continuous Operations",
+        "Tax Provision",
+        "Pretax Income",
+        "Other Income Expense",
+        "Other Non Operating Income Expenses",
+        "Net Non Operating Interest Income Expense",
+        "Interest Expense Non Operating",
+        "Interest Income Non Operating",
+        "Operating Income",
+        "Operating Expense",
+        "Research And Development",
+        "Selling General And Administration",
+        "Gross Profit",
+        "Cost Of Revenue",
+        "Total Revenue",
+        "Operating Revenue",
+        "stock",
+        ]
+    shares = shares.columns.intersection(columns)
     return shares
 
 def get_exchange_rate(stock, period, interval, to_currency):
@@ -92,7 +138,6 @@ def get_exchange_rate(stock, period, interval, to_currency):
     fx_rate = fx_rate.rename(columns = {StockData.ADJCLOSE.value : StockData.CURRENCYCLOSE.value})
     return fx_rate
 
-
 def get_news(stock):
     """This function downloads stock news information from yahoo finance api
     Args:
@@ -106,3 +151,18 @@ def get_news(stock):
     df[StockData.STOCK.value] = stock
     df = df.loc[:, [StockData.STOCK.value, 'uuid', 'title', 'publisher', 'link', 'providerPublishTime', 'type']]
     return df
+
+def enrich_stock_history(stock_history:pd.DataFrame):
+    """This function adds two columns to stock_history data frame
+        a. "daily_return": this is caluclated using the "close" price column, google "how to calculate daily return pandas"
+        b. "cummulative_return": this is caculated using the "daily_return" calculated from step above
+
+    Args:
+        stock_history (pd.DataFrame): dataframe that describes the stock history with daily return and cummulative return added
+        
+    Returns:
+        pd.DataFrame: the stock history with daily return and cummulative return data
+    """
+    stock_history[StockData.DAILYRETURN.value] = stock_history.close.pct_change(1)
+    stock_history[StockData.CUMRETURN.value] = (1 + stock_history.daily_return).cumprod() - 1
+    return stock_history
