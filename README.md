@@ -116,11 +116,32 @@ from sqlalchemy import create_engine #2. import sqlalchemy library(used for inte
 ENGINE = create_engine(f"sqlite:///<path on your local drive>.db") #3. create engine
 df.to_sql() #4. final step of saving dataframe to db, see pandas documents on how to pass the requried parameterss
 # https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_sql.html
+
 ```
+3. install sqlite studio from link below
+https://github.com/pawelsalawa/sqlitestudio/releases
 
+### Task 4
 
+1. add logging
+https://realpython.com/python-logging/
+https://www.youtube.com/watch?v=urrfJgHwIJA 
+```python
+import logging
 
+logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
+logging.info('Admin logged in')
+```
+2. add unit testing(use pytest, see youtube video below) for 2 functions one for get_stock_history and one for get_news
+https://www.youtube.com/watch?v=cHYq1MRoyI0&t=716s
 
+3. set up mysql engine and call your project below and you should see data loaded into mysql database
+   similar to how you set sqlite db. just change the connection string
+```python
+    tickers = ["AAPL"]
+    period = "5d"
+    main(tickers, period=period, db_type="mysql")
+```
 ## How to set up airflow
 #### 1. build image and create a container based on the image just  created
 ```docker
