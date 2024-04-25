@@ -1,4 +1,4 @@
-from extract_data import get_stock_history, get_stock_financials, get_news, get_exchange_rate
+from extract_data import get_stock_history, get_stock_financials, get_news, get_exchange_rate, enrich_stock_history
 
 def main():
     """_summary_
@@ -10,6 +10,8 @@ def main():
     print(rate)
     news = get_news(stock)
     print(news)
+    enrich = enrich_stock_history(get_stock_history(stock))
+    print(enrich)
 
 
 if __name__ == "__main__":

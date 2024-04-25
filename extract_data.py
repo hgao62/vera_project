@@ -22,6 +22,8 @@ class StockData(Enum):
     LOW = 'Low'
     HIGH = 'High'
     CURRENCYCLOSE = 'currency_close'
+    DAILYRETURN = 'daily_return'
+    CUMRETURN = 'cummulative_return'
 
 
 def get_stock_history(stock:str):
@@ -92,7 +94,6 @@ def get_exchange_rate(stock, period, interval, to_currency):
     fx_rate = fx_rate.rename(columns = {StockData.ADJCLOSE.value : StockData.CURRENCYCLOSE.value})
     return fx_rate
 
-
 def get_news(stock):
     """This function downloads stock news information from yahoo finance api
     Args:
@@ -106,3 +107,15 @@ def get_news(stock):
     df[StockData.STOCK.value] = stock
     df = df.loc[:, [StockData.STOCK.value, 'uuid', 'title', 'publisher', 'link', 'providerPublishTime', 'type']]
     return df
+
+def enrich_stock_history(stock_history:pd.DataFrame):
+    """This function adds two columns to stock_history data frame
+        a. "daily_return": this is caluclated using the "close" price column, google "how to calculate daily return pandas"
+        b. "cummulative_return": this is caculated using the "daily_return" calculated from step above
+
+    Args:
+        stock_history (pd.DataFrame): dataframe that describes the stock history with daily return and cummulative return added
+    """
+    stock_history[StockData.DAILYRETURN.value] = stock_history.close.pct_change(1)
+    stock_history[StockData.CUMRETURN.value] = (1 + stock_history.daily_return).cumprod() - 1
+    return stock_history
