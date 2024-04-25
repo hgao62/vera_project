@@ -142,6 +142,10 @@ https://www.youtube.com/watch?v=cHYq1MRoyI0&t=716s
     period = "5d"
     main(tickers, period=period, db_type="mysql")
 ```
+see video below to setup mysql
+https://www.youtube.com/watch?v=u96rVINbAUI
+
+
 ## How to set up airflow
 #### 1. build image and create a container based on the image just  created
 ```docker
