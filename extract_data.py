@@ -57,6 +57,50 @@ def get_stock_financials(stock:str):
     shares.reset_index(inplace = True)
     shares = shares.rename(columns = {'index' : StockData.DATE.value})
     shares[StockData.DATE.value] = shares[StockData.DATE.value].apply(lambda x: x.strftime(DATE_FORMAT))
+    columns = [
+        "date",
+        "Tax Effect Of Unusual Items",
+        "Tax Rate For Calcs",
+        "Normalized EBITDA",
+        "Net Income From Continuing Operation Net Minority Interest",
+        "Reconciled Depreciation",
+        "Reconciled Cost Of Revenue",
+        "EBITDA",
+        "EBIT",
+        "Net Interest Income",
+        "Interest Expense",
+        "Interest Income",
+        "Normalized Income",
+        "Net Income From Continuing And Discontinued Operation",
+        "Total Expenses",
+        "Total Operating Income As Reported",
+        "Diluted Average Shares",
+        "Basic Average Shares",
+        "Diluted EPS",
+        "Basic EPS",
+        "Diluted NI Availto Com Stockholders",
+        "Net Income Common Stockholders",
+        "Net Income",
+        "Net Income Including Noncontrolling Interests",
+        "Net Income Continuous Operations",
+        "Tax Provision",
+        "Pretax Income",
+        "Other Income Expense",
+        "Other Non Operating Income Expenses",
+        "Net Non Operating Interest Income Expense",
+        "Interest Expense Non Operating",
+        "Interest Income Non Operating",
+        "Operating Income",
+        "Operating Expense",
+        "Research And Development",
+        "Selling General And Administration",
+        "Gross Profit",
+        "Cost Of Revenue",
+        "Total Revenue",
+        "Operating Revenue",
+        "stock",
+        ]
+    shares = shares.columns.intersection(columns)
     return shares
 
 def get_exchange_rate(stock, period, interval, to_currency):
