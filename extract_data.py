@@ -2,8 +2,10 @@
 from enum import Enum
 import pandas as pd
 import yfinance as yf
+import logging
 
 DATE_FORMAT = '%Y-%m-%d %H:%M:%S.%f'
+logger = logging.getLogger(__name__)
 
 class StockData(Enum):
     """Enum for stock related attributes"""
@@ -33,6 +35,7 @@ def get_stock_history(stock:str):
     Returns:
         pd.DataFrame: records price marks of the stock for 6 days 
     """
+    logger.info(f'Getting stock history for {stock}.')
     ticker = yf.Ticker(stock)
     result = ticker.history(period="6d")
     result.reset_index(inplace = True)
@@ -41,7 +44,7 @@ def get_stock_history(stock:str):
     result[StockData.DIVIDENDS.value] = result[StockData.DIVIDENDS.value].astype(int)
     result.columns = result.columns.str.lower()
     result[StockData.STOCK.value] = stock
-    
+    logger.info(f'Finished getting stock history for {stock}.')
     return result
 
 def get_stock_financials(stock:str):
@@ -100,7 +103,8 @@ def get_stock_financials(stock:str):
         "Operating Revenue",
         "stock",
         ]
-    shares = shares.columns.intersection(columns)
+    common_columns = shares.columns.intersection(columns)
+    shares = shares[common_columns]
     return shares
 
 def get_exchange_rate(stock, period, interval, to_currency):

@@ -1,6 +1,10 @@
 from extract_data import get_stock_history, get_stock_financials, get_news, get_exchange_rate, enrich_stock_history
 from typing import List
 from load_data import save_df_to_db
+import logging
+
+logging.basicConfig(format="%(asctime)s - %(levelname)s - %(filename)s:%(lineno)s  - %(message)s", level=logging.INFO, filename='project_logging.log')
+logger = logging.getLogger(__name__)
 
 def main(stocks: List[str], period: str, interval:str, db_type:str):
     """_summary_
@@ -33,10 +37,11 @@ if __name__ == "__main__":
         "GOOGL",
         "AMZN",
         "MSFT",
-        "FB",
         "TSM",
         "NVDA",
         "JPM",
         "JNJ",
     ]
+    logger.info('Process started.')
     main(stocks, '5d', '1d', 'mysql')
+    logger.info('Process finished.')
