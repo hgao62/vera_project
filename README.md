@@ -123,7 +123,7 @@ https://github.com/pawelsalawa/sqlitestudio/releases
 
 ### Task 4
 
-1. add logging
+1. add logging to your project and add different type of logs wherever applicable
 https://realpython.com/python-logging/
 https://www.youtube.com/watch?v=urrfJgHwIJA 
 ```python
@@ -145,6 +145,19 @@ https://www.youtube.com/watch?v=cHYq1MRoyI0&t=716s
 see video below to setup mysql
 https://www.youtube.com/watch?v=u96rVINbAUI
 
+for mac user, you need to run brew install mysql pkg-config
+https://stackoverflow.com/questions/66669728/trouble-installing-mysql-client-on-mac
+
+### Task 5 dockerize your project and set up airflow
+
+docker tutorials- How To Containerize Python Applications
+https://www.youtube.com/watch?v=bi0cKgmRuiA
+
+docker  compose tutorial
+https://www.youtube.com/watch?v=HG6yIjZapSA&t=1598s
+
+apache airflow in one hour
+https://www.youtube.com/watch?v=s6PgXq-SO4I&list=PLc2EZr8W2QIAI0cS1nZGNxoLzppb7XbqM
 
 ## How to set up airflow
 #### 1. build image and create a container based on the image just  created
