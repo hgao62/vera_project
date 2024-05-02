@@ -2,7 +2,7 @@ from extract_data import get_stock_history, get_stock_financials, get_news, get_
 from typing import List
 from load_data import save_df_to_db
 
-def main(stocks: List[str], period: str, interval:str):
+def main(stocks: List[str], period: str, interval:str, db_type:str):
     """_summary_
     """
 
@@ -19,7 +19,7 @@ def main(stocks: List[str], period: str, interval:str):
         stock_financials = get_stock_financials(stock)
         rate = get_exchange_rate(stock, period, interval, 'GBP')
         news = get_news(stock)
-        
+
 
         save_df_to_db(stock_history, 'stock_history')
         save_df_to_db(stock_financials, 'stock_financials')
@@ -31,12 +31,12 @@ if __name__ == "__main__":
         "TSLA",
         "AAPL",
         "GOOGL",
-        # "AMZN",
-        # "MSFT",
-        # "FB",
-        # "TSM",
-        # "NVDA",
-        # "JPM",
-        # "JNJ",
+        "AMZN",
+        "MSFT",
+        "FB",
+        "TSM",
+        "NVDA",
+        "JPM",
+        "JNJ",
     ]
-    main(stocks, '5d', '1d')
+    main(stocks, '5d', '1d', 'mysql')
