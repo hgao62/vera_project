@@ -1,8 +1,9 @@
 """Extract stock data using yahoo finance api"""
 from enum import Enum
+import logging
 import pandas as pd
 import yfinance as yf
-import logging
+
 
 DATE_FORMAT = '%Y-%m-%d %H:%M:%S.%f'
 logger = logging.getLogger(__name__)
@@ -33,33 +34,38 @@ def get_stock_history(stock:str):
     Args:
         stock (str): stock name you want to download price for
     Returns:
-        pd.DataFrame: records price marks of the stock for 6 days 
+        pd.DataFrame: records price marks of the stock for 6 days
     """
-    logger.info(f'Getting stock history for {stock}.')
+    logger.info('Getting stock history for %s.', stock)
     ticker = yf.Ticker(stock)
     result = ticker.history(period="6d")
     result.reset_index(inplace = True)
     result.drop(columns = [StockData.STOCKSPLITS.value], inplace = True)
-    result[StockData.DATE.value] = result[StockData.DATE.value].apply(lambda x: x.strftime(DATE_FORMAT))
+    result[StockData.DATE.value] = result[StockData.DATE.value].apply(
+        lambda x: x.strftime(DATE_FORMAT)
+        )
     result[StockData.DIVIDENDS.value] = result[StockData.DIVIDENDS.value].astype(int)
     result.columns = result.columns.str.lower()
     result[StockData.STOCK.value] = stock
-    logger.info(f'Finished getting stock history for {stock}.')
+    logger.info('Finished getting stock history for %s.', stock)
     return result
 
 def get_stock_financials(stock:str):
     """This function downloads stock financials(income statement) from yahoo finance api
     Args:
-        stock (str): stock name you want to download the income statement for 
+        stock (str): stock name you want to download the income statement for
     Returns:
         pd.DataFrame: the stock income statement information of recent four years
     """
+    logger.info('Getting stock financials for %s.', stock)
     ticker = yf.Ticker(stock)
     shares = ticker.income_stmt
     shares = shares.T
     shares.reset_index(inplace = True)
     shares = shares.rename(columns = {'index' : StockData.DATE.value})
-    shares[StockData.DATE.value] = shares[StockData.DATE.value].apply(lambda x: x.strftime(DATE_FORMAT))
+    shares[StockData.DATE.value] = shares[StockData.DATE.value].apply(
+        lambda x: x.strftime(DATE_FORMAT)
+        )
     columns = [
         "date",
         "Tax Effect Of Unusual Items",
@@ -105,23 +111,29 @@ def get_stock_financials(stock:str):
         ]
     common_columns = shares.columns.intersection(columns)
     shares = shares[common_columns]
+    logger.info('Finished getting stock financials for %s.', stock)
     return shares
 
 def get_exchange_rate(stock, period, interval, to_currency):
     """This function downloads exchange rate changes of a certain currency from yahoo finance api
     Args:
-        stock (str): stock name you want to download the income statement for 
+        stock (str): stock name you want to download the income statement for
     Returns:
         pd.DataFrame: the stock currency rate information for a given time period
     """
+    logger.info('Getting stock exchange rate for %s.', stock)
     ticker = yf.Ticker(stock)
     currency_code = ticker.fast_info['currency']
     fx_rate_ticker = f'{currency_code}{to_currency}=X'
     fx_rate = yf.download(fx_rate_ticker, period=period, interval=interval)
     fx_rate.reset_index(inplace = True)
-    currency_date_key = fx_rate[StockData.DATE.value].apply(lambda x: x.strftime('%m%d%Y'))
+    currency_date_key = fx_rate[StockData.DATE.value].apply(
+        lambda x: x.strftime('%m%d%Y')
+        )
     exchange_id = currency_date_key + currency_code
-    fx_rate[StockData.DATE.value] = fx_rate[StockData.DATE.value].apply(lambda x: x.strftime(DATE_FORMAT))
+    fx_rate[StockData.DATE.value] = fx_rate[StockData.DATE.value].apply(
+        lambda x: x.strftime(DATE_FORMAT)
+        )
     fx_rate[StockData.EXCHANGEID.value] = exchange_id
     fx_rate[StockData.CURRENCYDATEKEY.value] = currency_date_key
     fx_rate[StockData.TOCURRENCY.value] = to_currency
@@ -140,6 +152,7 @@ def get_exchange_rate(stock, period, interval, to_currency):
                               StockData.EXCHANGEID.value,
                               StockData.CURRENCYDATEKEY.value]]
     fx_rate = fx_rate.rename(columns = {StockData.ADJCLOSE.value : StockData.CURRENCYCLOSE.value})
+    logger.info('Finished getting stock exchange rate for %s.', stock)
     return fx_rate
 
 def get_news(stock):
@@ -149,24 +162,38 @@ def get_news(stock):
     Returns:
         pd.DataFrame: the stock news information of recent four years
     """
+    logger.info('Getting stock news for %s.', stock)
     ticker = yf.Ticker(stock)
     news = ticker.news
-    df = pd.DataFrame(news)
-    df[StockData.STOCK.value] = stock
-    df = df.loc[:, [StockData.STOCK.value, 'uuid', 'title', 'publisher', 'link', 'providerPublishTime', 'type']]
-    return df
+    data = pd.DataFrame(news)
+    data[StockData.STOCK.value] = stock
+    data = data.loc[:, [StockData.STOCK.value,
+                    'uuid',
+                    'title',
+                    'publisher',
+                    'link',
+                    'providerPublishTime',
+                    'type']]
+    logger.info('Finished getting stock news for %s.', stock)
+    return data
 
 def enrich_stock_history(stock_history:pd.DataFrame):
     """This function adds two columns to stock_history data frame
-        a. "daily_return": this is caluclated using the "close" price column, google "how to calculate daily return pandas"
-        b. "cummulative_return": this is caculated using the "daily_return" calculated from step above
+        a. "daily_return": this is caluclated using the "close" price column,
+            google "how to calculate daily return pandas"
+        b. "cummulative_return": this is caculated using the "daily_return" calculated
+            from step above
 
     Args:
-        stock_history (pd.DataFrame): dataframe that describes the stock history with daily return and cummulative return added
-        
+        stock_history (pd.DataFrame):
+            dataframe that describes the stock history with daily return and
+            cummulative return added
+
     Returns:
         pd.DataFrame: the stock history with daily return and cummulative return data
     """
+    logger.info('Enriching stock history.')
     stock_history[StockData.DAILYRETURN.value] = stock_history.close.pct_change(1)
     stock_history[StockData.CUMRETURN.value] = (1 + stock_history.daily_return).cumprod() - 1
+    logger.info('Finished enriching stock history.')
     return stock_history

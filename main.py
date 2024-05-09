@@ -1,13 +1,20 @@
-from extract_data import get_stock_history, get_stock_financials, get_news, get_exchange_rate, enrich_stock_history
-from typing import List
-from load_data import save_df_to_db
+'''Getting the required stock information from a given list of stocks.'''
 import logging
+from typing import List
+from extract_data import get_stock_history, get_stock_financials, get_news, get_exchange_rate
+from load_data import save_df_to_db
 
-logging.basicConfig(format="%(asctime)s - %(levelname)s - %(filename)s:%(lineno)s  - %(message)s", level=logging.INFO, filename='project_logging.log')
+
+logging.basicConfig(
+    format="%(asctime)s - %(levelname)s - %(filename)s:%(lineno)s - %(message)s",
+    level=logging.INFO,
+    filename='project_logging.log'
+)
 logger = logging.getLogger(__name__)
 
-def main(stocks: List[str], period: str, interval:str, db_type:str):
-    """_summary_
+def main(stocks: List[str], period: str, interval:str):
+    """_summary_: Getting the data using the functions in extract_data
+                and save to database
     """
 
     # print(get_stock_history(stock))
@@ -31,7 +38,7 @@ def main(stocks: List[str], period: str, interval:str, db_type:str):
         save_df_to_db(news, 'news')
 
 if __name__ == "__main__":
-    stocks = [
+    stocklist = [
         "TSLA",
         "AAPL",
         "GOOGL",
@@ -43,5 +50,5 @@ if __name__ == "__main__":
         "JNJ",
     ]
     logger.info('Process started.')
-    main(stocks, '5d', '1d', 'mysql')
+    main(stocklist, '5d', '1d')
     logger.info('Process finished.')
