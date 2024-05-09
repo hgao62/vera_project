@@ -32,4 +32,4 @@ RUN pip install -r requirements.txt
 
 # copy the content of the local src directory to the working directory
 COPY . .
-CMD python main.py
+RUN chmod +x entrypoint.sh

@@ -17,15 +17,16 @@ services:
 # Define the Airflow webserver service
   airflow_webserver:
   # Build the Docker image using the Dockerfile in the current directory
-   build:
+    build:
    # Use the current directory as the build
-     context: .
+      context: .
      # Specify the Dockerfile to use for the build
-     dockerfile: Dockerfile.txt
-  
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    entrypoint: ./entrypoint.sh
 
 # volumes:
-#   mysql-db-volume: # Define the MySQL data volume
 volumes:
   mysql-db-volume: # Define the MySQL data volume
 

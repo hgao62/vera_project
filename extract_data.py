@@ -40,6 +40,7 @@ def get_stock_history(stock:str):
     ticker = yf.Ticker(stock)
     result = ticker.history(period="6d")
     result.reset_index(inplace = True)
+    logger.info(f'finish downloading data: {result.head(5)}')
     result.drop(columns = [StockData.STOCKSPLITS.value], inplace = True)
     result[StockData.DATE.value] = result[StockData.DATE.value].apply(
         lambda x: x.strftime(DATE_FORMAT)

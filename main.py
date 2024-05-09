@@ -16,21 +16,13 @@ def main(stocks: List[str], period: str, interval:str):
     """_summary_: Getting the data using the functions in extract_data
                 and save to database
     """
-
-    # print(get_stock_history(stock))
-    # print(get_stock_financials(stock))
-    # rate = get_exchange_rate(stock, '5d', '1d', 'GBP')
-    # print(rate)
-    # news = get_news(stock)
-    # print(news)
-    # enrich = enrich_stock_history(get_stock_history(stock))
-    # print(enrich)
+    
     for stock in stocks:
+        logger.info(f'list of stocks: {stock}, period: {period}, interval: {interval}')
         stock_history = get_stock_history(stock)
         stock_financials = get_stock_financials(stock)
         rate = get_exchange_rate(stock, period, interval, 'GBP')
         news = get_news(stock)
-
 
         save_df_to_db(stock_history, 'stock_history')
         save_df_to_db(stock_financials, 'stock_financials')
