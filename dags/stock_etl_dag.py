@@ -4,9 +4,11 @@ from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 import main
+import logging
 
 
 def run_etl(stock_list, period, interval):
+
     main.main(stock_list, period, interval)
 
 
@@ -31,6 +33,7 @@ dag = DAG(
     start_date=datetime(2024, 4, 22),
     description="My DAG for executing functions once a day at 8 PM",
     schedule="@daily",
+    render_template_as_native_obj = True
 )
 
 # Define a task to run the ETL function
