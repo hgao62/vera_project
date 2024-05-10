@@ -6,12 +6,12 @@ from sqlalchemy import create_engine
 
 logger = logging.getLogger(__name__)
 
-ENGINE = create_engine("mysql://Users/vera/Desktop/project_etl/vera_project/database/stock_db.db")
+ENGINE = create_engine("mysql+mysqlconnector://airflow_user:airflow_pass@localhost/airflow_db")
 # MySQL connection parameters
 MYSQL_HOST = 'localhost'
-MYSQL_DATABASE = 'stockdata'
-MYSQL_USER = 'root'
-MYSQL_PASSWORD = 'password123'
+MYSQL_DATABASE = 'airflow_db'
+MYSQL_USER = 'airflow_user'
+MYSQL_PASSWORD = 'airflow_pass'
 
 # MySQL connection URL
 MYSQL_CONNECTION_URL = (
